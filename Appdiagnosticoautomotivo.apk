@@ -1,191 +1,429 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoDX Pro v2</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoDX Fácil</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-<style>
-body{
-  background:#0b1220;
-  color:white;
-  font-family:system-ui;
-}
+    body {
+      background: #081c3a;
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-.card{
-  background:#111a2e;
-  padding:15px;
-  border-radius:14px;
-  margin-bottom:12px;
-}
+    .container {
+      max-width: 950px;
+      margin: auto;
+    }
 
-input, select{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  background:#0f172a;
-  color:white;
-  border-radius:10px;
-  margin-bottom:10px;
-  border:none;
-}
+    .topo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-footer{
-  position:sticky;
-  bottom:0;
-}
-</style>
+    .topo h1 {
+      font-size: 38px;
+      color: #ff7a00;
+      margin-bottom: 10px;
+    }
+
+    .topo p {
+      color: #d8d8d8;
+      font-size: 18px;
+    }
+
+    .card {
+      background: #10284d;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .card h2 {
+      color: #ff7a00;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      background: #e9eef7;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .sintomas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .sintoma {
+      background: #16345f;
+      padding: 18px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: 2px solid transparent;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .sintoma:hover {
+      transform: scale(1.03);
+      border-color: #ff7a00;
+    }
+
+    .sintoma.ativo {
+      background: #ff7a00;
+      color: #081c3a;
+    }
+
+    button {
+      width: 100%;
+      background: #ff7a00;
+      color: #081c3a;
+      border: none;
+      padding: 18px;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background: #ff922e;
+    }
+
+    .resultado {
+      display: none;
+    }
+
+    .box {
+      background: #16345f;
+      border-left: 8px solid #ff7a00;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+
+    .urgencia {
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .alta {
+      background: #ff3b30;
+      color: white;
+    }
+
+    .media {
+      background: #ffcc00;
+      color: #000;
+    }
+
+    .baixa {
+      background: #2ecc71;
+      color: white;
+    }
+
+    .acoes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .acoes button {
+      margin-top: 0;
+    }
+
+    .alerta {
+      margin-top: 25px;
+      background: #ffc107;
+      color: #000;
+      padding: 20px;
+      border-radius: 15px;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #bfbfbf;
+      font-size: 14px;
+    }
+
+    @media(max-width: 768px) {
+      .topo h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="max-w-3xl mx-auto p-4">
+  <div class="container">
 
-<h1 class="text-2xl font-bold text-cyan-400 text-center mb-4">
-AutoDX Pro
-</h1>
+    <div class="topo">
+      <h1>AutoDX Fácil</h1>
+      <p>Diagnóstico veicular inteligente para pessoas leigas</p>
+    </div>
 
-<!-- VEÍCULO -->
-<div class="card">
-  <input id="marca" placeholder="Marca (ex: Volkswagen)" style="padding:16px; font-size:17px;">
-  <input id="modelo" placeholder="Modelo (ex: Gol, Corolla)" style="padding:16px; font-size:17px;">
-  <input id="ano" placeholder="Ano (ex: 2015)" style="padding:16px; font-size:17px;">
-  <input id="motorizacao" placeholder="Motorização (ex: 1.0, 1.6, 2.0 Turbo)" style="padding:16px; font-size:17px;">
-</div>
+    <div class="card">
+      <h2>Dados do Veículo</h2>
 
-<!-- MOTOR -->
-<div class="card">
-<h2 class="font-bold mb-2">Motor</h2>
-<select id="motor">
-  <option value="0">Sem problema</option>
-  <option value="2">Falhando</option>
-  <option value="3">Perda de força</option>
-  <option value="4">Consumo alto</option>
-  <option value="5">Barulho metálico</option>
-</select>
-</div>
+      <div class="grid">
+        <input type="text" id="marca" placeholder="Marca do veículo">
+        <input type="text" id="modelo" placeholder="Modelo do veículo">
+        <input type="number" id="ano" placeholder="Ano do veículo">
+        <input type="text" id="motor" placeholder="Motorização ex: 1.0 / 1.6 / 2.0">
+      </div>
+    </div>
 
-<!-- SUSPENSÃO -->
-<div class="card">
-<h2 class="font-bold mb-2">Suspensão</h2>
-<select id="suspensao">
-  <option value="0">Sem problema</option>
-  <option value="2">Batendo</option>
-  <option value="3">Vibração</option>
-  <option value="4">Carro instável</option>
-</select>
-</div>
+    <div class="card">
+      <h2>Selecione o Sintoma Principal</h2>
 
-<!-- FREIOS -->
-<div class="card">
-<h2 class="font-bold mb-2">Freios</h2>
-<select id="freios">
-  <option value="0">Normal</option>
-  <option value="3">Freio fraco</option>
-  <option value="4">Chiado</option>
-  <option value="5">Pedal baixo</option>
-</select>
-</div>
+      <div class="sintomas">
+        <div class="sintoma" data-sintoma="falhando">Carro falhando</div>
+        <div class="sintoma" data-sintoma="naoliga">Não liga</div>
+        <div class="sintoma" data-sintoma="esquentando">Superaquecendo</div>
+        <div class="sintoma" data-sintoma="fumaca">Saindo fumaça</div>
+        <div class="sintoma" data-sintoma="barulho">Barulho estranho</div>
+        <div class="sintoma" data-sintoma="vibracao">Vibração excessiva</div>
+        <div class="sintoma" data-sintoma="consumo">Consumo alto</div>
+        <div class="sintoma" data-sintoma="freio">Problemas no freio</div>
+      </div>
+    </div>
 
-<!-- DIREÇÃO -->
-<div class="card">
-<h2 class="font-bold mb-2">Direção</h2>
-<select id="direcao">
-  <option value="0">Normal</option>
-  <option value="3">Dura</option>
-  <option value="4">Vibrando</option>
-</select>
-</div>
+    <div class="card">
+      <h2>Detalhes Adicionais</h2>
 
-<button onclick="diagnosticar()" class="w-full bg-green-600 p-3 rounded-xl font-bold">
-Gerar Diagnóstico
-</button>
+      <textarea id="descricao" placeholder="Explique com detalhes o problema do veículo..."></textarea>
 
-<div id="resultado" class="card mt-4 hidden"></div>
+      <button onclick="gerarDiagnostico()">Gerar Diagnóstico Inteligente</button>
+    </div>
 
-</div>
+    <div class="card resultado" id="resultado">
+      <h2>Resultado do Diagnóstico</h2>
 
-<!-- AVISO FINAL DESTACADO -->
-<div style="
-position:sticky;
-bottom:0;
-background:#facc15;
-color:#111;
-padding:14px;
-font-weight:bold;
-text-align:center;
-border-top:3px solid #eab308;
-">
-⚠ O diagnóstico é probabilístico e não substitui avaliação profissional.  
-Em caso de risco, ruídos fortes ou falha de freio, NÃO utilize o veículo.
-</div>
+      <div class="box">
+        <h3>Diagnóstico Provável</h3>
+        <p id="diag"></p>
+      </div>
 
-<script>
+      <div class="box">
+        <h3>Nível de Urgência</h3>
+        <div id="urgencia"></div>
+      </div>
 
-function diagnosticar(){
+      <div class="box">
+        <h3>O que verificar primeiro</h3>
+        <p id="verificar"></p>
+      </div>
 
-let pontos = 0;
-let detalhes = [];
+      <div class="box">
+        <h3>Estimativa média de custo</h3>
+        <p id="custo"></p>
+      </div>
 
-const veiculo = `${marca.value} ${modelo.value} ${ano.value} - ${motorizacao.value}`;
+      <div class="box">
+        <h3>Explicação simples</h3>
+        <p id="explicacao"></p>
+      </div>
 
-// MOTOR
-pontos += Number(motor.value);
-if(motor.value=="2") detalhes.push("Motor falhando pode indicar falha de ignição, velas ou combustível.");
-if(motor.value=="3") detalhes.push("Perda de força pode indicar filtro de ar ou injeção suja.");
-if(motor.value=="4") detalhes.push("Consumo alto pode indicar mistura incorreta ou sensores.");
-if(motor.value=="5") detalhes.push("Barulho metálico pode indicar desgaste interno do motor.");
+      <div class="acoes">
+        <button onclick="baixarPDF()">Baixar PDF</button>
+        <button onclick="enviarWhatsApp()">Enviar WhatsApp</button>
+        <button onclick="enviarEmail()">Enviar por Email</button>
+      </div>
 
-// SUSPENSÃO
-pontos += Number(suspensao.value);
-if(suspensao.value=="2") detalhes.push("Suspensão batendo pode indicar buchas ou amortecedores desgastados.");
-if(suspensao.value=="3") detalhes.push("Vibração pode indicar pneus deformados ou desalinhamento.");
-if(suspensao.value=="4") detalhes.push("Instabilidade pode indicar desgaste geral do sistema.");
+      <div class="alerta">
+        ⚠️ AVISO IMPORTANTE: Este diagnóstico é baseado nas informações fornecidas pelo usuário e serve como orientação inicial. Sempre procure uma oficina especializada para confirmação técnica completa.
+      </div>
+    </div>
 
-// FREIOS
-pontos += Number(freios.value);
-if(freios.value=="3") detalhes.push("Freio fraco pode indicar fluido baixo ou pastilhas gastas.");
-if(freios.value=="4") detalhes.push("Chiado indica desgaste avançado das pastilhas.");
-if(freios.value=="5") detalhes.push("Pedal baixo pode indicar vazamento no sistema.");
+    <div class="footer">
+      AutoDX Fácil © 2026 — Sistema Inteligente de Diagnóstico Veicular
+    </div>
 
-// DIREÇÃO
-pontos += Number(direcao.value);
-if(direcao.value=="3") detalhes.push("Direção dura pode indicar bomba hidráulica ou fluido baixo.");
-if(direcao.value=="4") detalhes.push("Vibração pode indicar alinhamento ou suspensão comprometida.");
+  </div>
 
-let risco =
-pontos <= 3 ? "BAIXO" :
-pontos <= 7 ? "MÉDIO" :
-"ALTO";
+  <script>
 
-resultado.innerHTML = `
-<h2 class="text-cyan-400 font-bold text-lg">Diagnóstico Completo AutoDX Pro</h2>
+    let sintomaSelecionado = '';
 
-<p><b>Veículo:</b> ${veiculo}</p>
-<p><b>Nível de risco:</b> ${risco}</p>
+    const sintomas = document.querySelectorAll('.sintoma');
 
-<h3 class="mt-3 font-bold">Análise Detalhada</h3>
-<p>
-A análise abaixo é baseada na combinação dos sintomas informados.  
-Cada ponto indica possíveis falhas associadas ao comportamento do veículo.
-</p>
+    sintomas.forEach(item => {
+      item.addEventListener('click', () => {
 
-<ul class="mt-2">
-${detalhes.map(d=>`<li>• ${d}</li>`).join('')}
-</ul>
+        sintomas.forEach(el => el.classList.remove('ativo'));
 
-<p class="mt-3 text-yellow-300">
-⚠ Resultado gerado por probabilidade de sintomas e correlação mecânica.
-</p>
-`;
+        item.classList.add('ativo');
 
-resultado.classList.remove("hidden");
+        sintomaSelecionado = item.dataset.sintoma;
+      });
+    });
 
-}
+    const diagnosticos = {
 
-</script>
+      falhando: {
+        diag: 'Possível falha de ignição, velas gastas, bobina defeituosa ou bicos injetores sujos.',
+        urgencia: 'ALTA',
+        classe: 'alta',
+        verificar: 'Velas, cabos, bobinas e sistema de injeção eletrônica.',
+        custo: 'R$ 150 até R$ 1.200',
+        explicacao: 'O motor pode estar queimando combustível de forma irregular.'
+      },
+
+      naoliga: {
+        diag: 'Possível bateria descarregada, motor de partida ou falha elétrica.',
+        urgencia: 'ALTA',
+        classe: 'alta',
+        verificar: 'Bateria, alternador, fusíveis e motor de arranque.',
+        custo: 'R$ 120 até R$ 2.000',
+        explicacao: 'O sistema elétrico pode não estar conseguindo alimentar o veículo corretamente.'
+      },
+
+      esquentando: {
+        diag: 'Possível problema no sistema de arrefecimento.',
+        urgencia: 'ALTA',
+        classe: 'alta',
+        verificar: 'Radiador, água, ventoinha, válvula termostática e bomba d’água.',
+        custo: 'R$ 200 até R$ 3.500',
+        explicacao: 'O motor está trabalhando acima da temperatura ideal.'
+      },
+
+      fumaca: {
+        diag: 'Possível queima de óleo, mistura rica ou problemas internos no motor.',
+        urgencia: 'MÉDIA/ALTA',
+        classe: 'media',
+        verificar: 'Nível de óleo, junta do cabeçote e sistema de combustível.',
+        custo: 'R$ 300 até R$ 8.000',
+        explicacao: 'O motor pode estar queimando óleo ou combustível incorretamente.'
+      },
+
+      barulho: {
+        diag: 'Possível desgaste mecânico ou problemas em suspensão e rolamentos.',
+        urgencia: 'MÉDIA',
+        classe: 'media',
+        verificar: 'Suspensão, rolamentos, correias e escapamento.',
+        custo: 'R$ 100 até R$ 2.500',
+        explicacao: 'Peças podem estar desgastadas ou com folgas anormais.'
+      },
+
+      vibracao: {
+        diag: 'Possível desbalanceamento, problemas em pneus ou transmissão.',
+        urgencia: 'MÉDIA',
+        classe: 'media',
+        verificar: 'Pneus, rodas, alinhamento e coxins.',
+        custo: 'R$ 80 até R$ 2.000',
+        explicacao: 'O veículo pode estar com componentes desalinhados ou desgastados.'
+      },
+
+      consumo: {
+        diag: 'Possível problema de injeção eletrônica ou sensores.',
+        urgencia: 'BAIXA/MÉDIA',
+        classe: 'baixa',
+        verificar: 'Filtro de ar, velas, sensores e bicos.',
+        custo: 'R$ 100 até R$ 1.500',
+        explicacao: 'O motor pode estar consumindo mais combustível que o normal.'
+      },
+
+      freio: {
+        diag: 'Possível desgaste nas pastilhas, discos ou fluido de freio.',
+        urgencia: 'ALTA',
+        classe: 'alta',
+        verificar: 'Pastilhas, discos, fluido e cilindro mestre.',
+        custo: 'R$ 150 até R$ 2.000',
+        explicacao: 'O sistema de frenagem pode estar comprometido.'
+      }
+
+    };
+
+    function gerarDiagnostico() {
+
+      if(sintomaSelecionado === '') {
+        alert('Selecione um sintoma principal.');
+        return;
+      }
+
+      const resultado = diagnosticos[sintomaSelecionado];
+
+      document.getElementById('resultado').style.display = 'block';
+
+      document.getElementById('diag').innerText = resultado.diag;
+
+      document.getElementById('urgencia').innerHTML = `
+        <div class="urgencia ${resultado.classe}">
+          ${resultado.urgencia}
+        </div>
+      `;
+
+      document.getElementById('verificar').innerText = resultado.verificar;
+      document.getElementById('custo').innerText = resultado.custo;
+      document.getElementById('explicacao').innerText = resultado.explicacao;
+
+      document.getElementById('resultado').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+
+    function baixarPDF() {
+      window.print();
+    }
+
+    function enviarWhatsApp() {
+
+      const texto = `Diagnóstico AutoDX Fácil:%0A%0A${document.getElementById('diag').innerText}%0A%0AUrgência: ${document.getElementById('urgencia').innerText}`;
+
+      window.open(`https://wa.me/?text=${texto}`, '_blank');
+    }
+
+    function enviarEmail() {
+
+      const assunto = 'Diagnóstico Veicular AutoDX Fácil';
+
+      const corpo = `Diagnóstico:%0A${document.getElementById('diag').innerText}%0A%0AUrgência:%0A${document.getElementById('urgencia').innerText}`;
+
+      window.location.href = `mailto:?subject=${assunto}&body=${corpo}`;
+    }
+
+  </script>
 
 </body>
 </html>
